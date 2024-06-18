@@ -7,6 +7,10 @@
       "@interfaces/*": ["src/app/types/*"],
       "@services/*": ["./src/app/services/*"],
       "@utils/*": ["./src/app/utils/*"],
+
+      "@pages/*": ["./src/pages/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@widget": ["./src/widget/*"],
       "@src/*": ["./src/*"]
     },
     "target": "ES2021",
