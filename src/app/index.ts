@@ -1,12 +1,4 @@
-import { Game } from '@pages/game';
+import { mount } from '@control.ts/min';
+import { nonogram } from '@src/nonogram';
 
-class App {
-  private page: Game = new Game();
-  private rootElement: HTMLElement = document.body;
-
-  public startApp(): void {
-    this.rootElement.append(this.page.getNode());
-  }
-}
-
-new App().startApp();
+mount(document.body, nonogram);
