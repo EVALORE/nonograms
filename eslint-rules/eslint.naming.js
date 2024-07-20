@@ -13,8 +13,7 @@ export const naming = {
     'e',
     'err',
   ],
-  'id-length': ['error', { min: 3, max: 30, properties: 'never' }],
-  // 'id-match': ['error', '^[a-z]+([A-Z][a-z]+)*$'],
+  'id-length': ['error', { min: 3, max: 30, properties: 'never', exceptions: ['_', '__'] }],
 
   camelcase: 'error',
   'no-underscore-dangle': [
