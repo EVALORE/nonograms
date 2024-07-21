@@ -1,6 +1,6 @@
 import { tr } from '@control.ts/min';
 
-export function generateTableContent(
+export function generateTableElements(
   numRows: number,
   numCols: number,
   generateElement: (rowIndex: number, colIndex: number) => HTMLElement,

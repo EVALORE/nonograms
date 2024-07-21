@@ -1,9 +1,6 @@
-import { areInvalidParams } from './validations';
+import { type NonogramGrid } from '../types/templateValues';
 
-export function getRowSequence(row: number, template: number[][]): number[] {
-  if (areInvalidParams(row, template)) {
-    return [];
-  }
+export function getRowSequence(row: number, template: NonogramGrid): number[] {
   const rowSequences: number[] = [];
   let counter = 0;
 
@@ -23,11 +20,7 @@ export function getRowSequence(row: number, template: number[][]): number[] {
   return rowSequences;
 }
 
-export function getColumnSequence(columnIndex: number, template: number[][]): number[] {
-  if (areInvalidParams(columnIndex, template)) {
-    return [];
-  }
-
+export function getColumnSequence(columnIndex: number, template: NonogramGrid): number[] {
   const columnSequences: number[] = [];
   let counter = 0;
 
@@ -50,7 +43,7 @@ export function getColumnSequence(columnIndex: number, template: number[][]): nu
 
 export function extractHintSequences(
   sequencesDirection: 'row' | 'column',
-  template: number[][],
+  template: NonogramGrid,
 ): number[][] {
   const getSequenceFunction = sequencesDirection === 'row' ? getRowSequence : getColumnSequence;
   let maxSequenceLength = 0;
