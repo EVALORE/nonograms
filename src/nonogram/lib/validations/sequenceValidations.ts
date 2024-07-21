@@ -53,3 +53,7 @@ export function areValidSequences(
 
   return true;
 }
+
+export function areGridsEqual(PlayerGrid: NonogramGrid, TemplateGrid: NonogramGrid): boolean {
+  return JSON.stringify(PlayerGrid) === JSON.stringify(TemplateGrid);
+}

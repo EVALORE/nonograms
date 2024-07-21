@@ -1,32 +1,16 @@
 import { BaseComponent, bcToFc, table, tbody, td, tr } from '@control.ts/min';
-import { type NonogramGrid } from './types/templateValues';
-import { NonogramModel } from './nonogram.model';
+import { type NonogramService } from './nonogram.service';
 import { cell } from './cell';
 import { generateTableElements } from './lib';
 import { hint } from './hint';
 
-const template: NonogramGrid = [
-  [0, 0, 1, 0, 0, 1, 0, 0, 1],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0],
-  [1, 0, 0, 0, 1, 1, 1, 0, 0],
-  [0, 1, 0, 0, 1, 1, 0, 0, 1],
-  [0, 0, 1, 1, 1, 1, 1, 1, 1],
-  [0, 1, 0, 0, 1, 1, 0, 0, 1],
-  [1, 0, 0, 0, 1, 1, 1, 0, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 1],
-];
-
-export class NonogramUI extends BaseComponent<HTMLTableElement> {
-  private nonogram: NonogramModel;
-
+export class NonogramComponent extends BaseComponent<HTMLTableElement> {
   private cellTable!: HTMLTableElement;
   private columnHintsTable!: HTMLTableElement;
   private rowHintsTable!: HTMLTableElement;
 
-  constructor() {
+  constructor(private readonly nonogramService: NonogramService) {
     super({ tag: 'table', className: 'nonogram' });
-    this.nonogram = new NonogramModel(template);
     this.initializeTables();
     this.renderTables();
   }
@@ -71,27 +55,27 @@ export class NonogramUI extends BaseComponent<HTMLTableElement> {
 
   private generateCells(): HTMLElement[] {
     return generateTableElements(
-      this.nonogram.templateRows,
-      this.nonogram.templateColumns,
-      (rowIndex, colIndex) => cell(this.nonogram.getCell(colIndex, rowIndex)).node,
+      this.nonogramService.templateRows,
+      this.nonogramService.templateColumns,
+      (rowIndex, colIndex) => cell(this.nonogramService.getCell(colIndex, rowIndex)).node,
     );
   }
 
   private generateColumnHints(): HTMLElement[] {
     return generateTableElements(
-      this.nonogram.maxLengthOfColumnHints,
-      this.nonogram.templateColumns,
-      (rowIndex, colIndex) => hint(this.nonogram.getColumnHint(rowIndex, colIndex)).node,
+      this.nonogramService.lengthOfColumnHints,
+      this.nonogramService.templateColumns,
+      (rowIndex, colIndex) => hint(this.nonogramService.getColumnHint(rowIndex, colIndex)).node,
     );
   }
 
   private generateRowHints(): HTMLElement[] {
     return generateTableElements(
-      this.nonogram.templateRows,
-      this.nonogram.maxLengthOfRowHints,
-      (rowIndex, colIndex) => hint(this.nonogram.getRowHint(colIndex, rowIndex)).node,
+      this.nonogramService.templateRows,
+      this.nonogramService.lengthOfRowHints,
+      (rowIndex, colIndex) => hint(this.nonogramService.getRowHint(colIndex, rowIndex)).node,
     );
   }
 }
 
-export const nonogram = bcToFc(NonogramUI);
+export const nonogram = bcToFc(NonogramComponent);

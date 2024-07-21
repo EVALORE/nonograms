@@ -1,7 +1,7 @@
 import { BaseComponent, bcToFc } from '@control.ts/min';
 import { type CellModel } from './cell.model';
 
-export class CellUI extends BaseComponent<HTMLTableCellElement> {
+export class CellComponent extends BaseComponent<HTMLTableCellElement> {
   constructor(private readonly cellModel: CellModel) {
     super({
       tag: 'td',
@@ -54,4 +54,4 @@ export class CellUI extends BaseComponent<HTMLTableCellElement> {
   }
 }
 
-export const cell = bcToFc(CellUI);
+export const cell = bcToFc(CellComponent);

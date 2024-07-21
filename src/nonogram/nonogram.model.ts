@@ -3,6 +3,15 @@ import { HintModel } from './hint';
 import { type NonogramGrid } from './types/templateValues';
 import { extractHintSequences } from './lib';
 
+const template: NonogramGrid = [
+  [0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 1, 1, 0, 1, 0],
+  [0, 1, 1, 1, 1, 1, 0],
+];
+
 export class NonogramModel {
   public readonly templateRows: number;
   public readonly templateColumns: number;
@@ -19,7 +28,7 @@ export class NonogramModel {
   public maxLengthOfRowHints: number;
 
   public readonly template: NonogramGrid;
-  constructor(template: NonogramGrid) {
+  constructor() {
     this.template = template;
     this.templateRows = template.length;
     this.templateColumns = template[0]!.length;

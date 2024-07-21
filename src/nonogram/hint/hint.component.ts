@@ -1,7 +1,7 @@
 import { BaseComponent, bcToFc } from '@control.ts/min';
 import { type HintModel } from '.';
 
-export class ClueUI extends BaseComponent<HTMLTableCellElement> {
+export class HintComponent extends BaseComponent<HTMLTableCellElement> {
   constructor(private readonly hintModel: HintModel) {
     super({
       tag: 'td',
@@ -50,4 +50,4 @@ export class ClueUI extends BaseComponent<HTMLTableCellElement> {
   }
 }
 
-export const hint = bcToFc(ClueUI);
+export const hint = bcToFc(HintComponent);
