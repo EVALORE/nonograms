@@ -1,16 +1,13 @@
 import { type CellCoords, type CellModel } from './cell';
-import { areGridsEqual, areValidSequences } from './lib';
 import { type HintModel } from './hint';
+
 import { type NonogramModel } from './nonogram.model';
 import { type Observer } from '@shared/observer';
 
 export class NonogramService implements Observer<CellCoords> {
-  constructor(private readonly nonogram: NonogramModel) {
-    this.nonogram.cells.forEach((row) => {
-      row.forEach((cell) => {
-        cell.attach(this);
-      });
-    });
+  private readonly nonogram: NonogramModel;
+  constructor(nonogram: NonogramModel) {
+    this.nonogram = nonogram;
   }
 
   public get templateRows(): number {
@@ -22,39 +19,27 @@ export class NonogramService implements Observer<CellCoords> {
   }
 
   public get lengthOfColumnHints(): number {
-    return this.nonogram.maxLengthOfColumnHints;
+    return this.nonogram.longestColumnSequence;
   }
 
   public get lengthOfRowHints(): number {
-    return this.nonogram.maxLengthOfRowHints;
+    return this.nonogram.longestRowSequence;
   }
 
-  public getCell(xCoord: number, yCoord: number): CellModel {
-    return this.nonogram.getCell(xCoord, yCoord);
+  public getCell(colIndex: number, rowIndex: number): CellModel {
+    return this.nonogram.cells[rowIndex * this.templateColumns + colIndex]!;
   }
 
-  public getColumnHint(xCoord: number, yCoord: number): HintModel {
-    return this.nonogram.getColumnHint(xCoord, yCoord);
+  public getRowHint(colIndex: number, rowIndex: number): HintModel {
+    return this.nonogram.rowHints[rowIndex * this.lengthOfRowHints + colIndex]!;
   }
 
-  public getRowHint(xCoord: number, yCoord: number): HintModel {
-    return this.nonogram.getRowHint(xCoord, yCoord);
-  }
-
-  public changeCellValue(value: CellCoords): void {
-    const newValue = this.nonogram.getCellState(value.xCoord, value.yCoord) === 'filled' ? 1 : 0;
-    this.nonogram.setCellValue(value.xCoord, value.yCoord, newValue);
-  }
-
-  public compareSequences(cellCoords: CellCoords): boolean {
-    if (areValidSequences(this.nonogram.PlayerCellsValues, this.nonogram.template, cellCoords)) {
-      return areGridsEqual(this.nonogram.PlayerCellsValues, this.nonogram.template);
-    }
-    return false;
+  public getColumnHint(rowIndex: number, colIndex: number): HintModel {
+    return this.nonogram.columnHints[colIndex * this.lengthOfColumnHints + rowIndex]!;
   }
 
   public update(value: CellCoords): void {
-    this.changeCellValue(value);
-    this.compareSequences(value);
+    const { xCoord, yCoord } = value;
+    this.getCell(xCoord, yCoord);
   }
 }

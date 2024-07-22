@@ -1,66 +1,50 @@
 import { type NonogramGrid } from '../types/templateValues';
 
-export function getRowSequence(row: number, template: NonogramGrid): number[] {
-  const rowSequences: number[] = [];
+function extractLineSequence(line: (0 | 1)[]): number[] {
+  const sequences: number[] = [];
   let counter = 0;
 
-  template[row]!.forEach((currentCell) => {
+  line.forEach((currentCell) => {
     if (currentCell === 1) {
       counter += 1;
     } else if (counter > 0) {
-      rowSequences.push(counter);
+      sequences.push(counter);
       counter = 0;
     }
   });
 
   if (counter > 0) {
-    rowSequences.push(counter);
+    sequences.push(counter);
   }
 
-  return rowSequences;
+  return sequences;
+}
+
+// Refactored functions
+export function getRowSequence(row: number, template: NonogramGrid): number[] {
+  return extractLineSequence(template[row]!);
 }
 
 export function getColumnSequence(columnIndex: number, template: NonogramGrid): number[] {
-  const columnSequences: number[] = [];
-  let counter = 0;
-
-  template.forEach((row) => {
-    const currentCell = row[columnIndex];
-    if (currentCell === 1) {
-      counter += 1;
-    } else if (counter > 0) {
-      columnSequences.push(counter);
-      counter = 0;
-    }
-  });
-
-  if (counter > 0) {
-    columnSequences.push(counter);
-  }
-
-  return columnSequences;
+  const column = template.map((row) => row[columnIndex]!);
+  return extractLineSequence(column);
 }
 
 export function extractHintSequences(
   sequencesDirection: 'row' | 'column',
   template: NonogramGrid,
 ): number[][] {
-  const getSequenceFunction = sequencesDirection === 'row' ? getRowSequence : getColumnSequence;
-  let maxSequenceLength = 0;
+  const sequences =
+    sequencesDirection === 'row'
+      ? template.map(extractLineSequence)
+      : Array.from({ length: template[0]!.length }, (_, colIndex) =>
+          extractLineSequence(template.map((row) => row[colIndex]!)),
+        );
 
-  const sequences = Array.from({
-    length: sequencesDirection === 'row' ? template.length : template[0]!.length,
-  }).map((_, sequenceIndex) => {
-    const sequence = getSequenceFunction(sequenceIndex, template);
-    maxSequenceLength = Math.max(maxSequenceLength, sequence.length);
-    return sequence;
-  });
-
-  sequences.forEach((sequence) => {
-    while (sequence.length < maxSequenceLength) {
-      sequence.unshift(0);
-    }
-  });
-
-  return sequences;
+  const maxSequenceLength = Math.max(...sequences.map((seq) => seq.length));
+  return sequences.map((sequence) =>
+    Array<number>(maxSequenceLength - sequence.length)
+      .fill(0)
+      .concat(sequence),
+  );
 }

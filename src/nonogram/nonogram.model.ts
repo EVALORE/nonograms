@@ -16,74 +16,70 @@ export class NonogramModel {
   public readonly templateRows: number;
   public readonly templateColumns: number;
 
-  public PlayerCellsValues: NonogramGrid = [];
-  public sequencesOfEachColumn: number[][];
-  public sequencesOfEachRow: number[][];
-
-  public cells: CellModel[][];
-  public columnHints: HintModel[][];
-  public rowHints: HintModel[][];
-
-  public maxLengthOfColumnHints: number;
-  public maxLengthOfRowHints: number;
+  public readonly cells: CellModel[];
+  public readonly columnHints: HintModel[];
+  public readonly rowHints: HintModel[];
 
   public readonly template: NonogramGrid;
+
+  public longestColumnSequence = 0;
+  public longestRowSequence = 0;
+
   constructor() {
     this.template = template;
     this.templateRows = template.length;
     this.templateColumns = template[0]!.length;
 
-    this.PlayerCellsValues = this.initializePlayerCellsValues();
+    this.columnHints = this.initializeColumnHints();
 
-    this.sequencesOfEachColumn = extractHintSequences('column', template);
-    this.sequencesOfEachRow = extractHintSequences('row', template);
-
-    this.columnHints = this.initializeHints(this.sequencesOfEachColumn);
-    this.rowHints = this.initializeHints(this.sequencesOfEachRow);
+    this.rowHints = this.initializeRowHints();
 
     this.cells = this.initializeCells();
-
-    this.maxLengthOfColumnHints = this.sequencesOfEachColumn[0]!.length;
-    this.maxLengthOfRowHints = this.sequencesOfEachRow[0]!.length;
   }
 
-  public setCellValue(xCoord: number, yCoord: number, value: 0 | 1): void {
-    this.PlayerCellsValues[yCoord]![xCoord] = value;
+  private initializeColumnHints(): HintModel[] {
+    const sequencesOfEachColumn = extractHintSequences('column', template);
+    this.longestColumnSequence = sequencesOfEachColumn[0]!.length;
+
+    const hints = new Array<HintModel>(this.templateColumns * this.longestColumnSequence);
+
+    for (let rowIndex = 0; rowIndex < this.templateColumns; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < this.longestColumnSequence; colIndex += 1) {
+        hints[rowIndex * this.longestColumnSequence + colIndex] = new HintModel(
+          sequencesOfEachColumn[rowIndex]![colIndex]!,
+        );
+      }
+    }
+
+    return hints;
   }
 
-  public getCellState(xCoord: number, yCoord: number): CellModel['state'] {
-    return this.cells[yCoord]![xCoord]!.state;
+  private initializeRowHints(): HintModel[] {
+    const sequencesOfEachRow = extractHintSequences('row', template);
+    this.longestRowSequence = sequencesOfEachRow[0]!.length;
+
+    const hints = new Array<HintModel>(this.templateRows * this.longestRowSequence);
+
+    for (let rowIndex = 0; rowIndex < this.templateRows; rowIndex += 1) {
+      for (let hintIndex = 0; hintIndex < this.longestRowSequence; hintIndex += 1) {
+        hints[rowIndex * this.longestRowSequence + hintIndex] = new HintModel(
+          sequencesOfEachRow[rowIndex]![hintIndex]!,
+        );
+      }
+    }
+
+    return hints;
   }
 
-  public getCell(xCoord: number, yCoord: number): CellModel {
-    return this.cells[yCoord]![xCoord]!;
-  }
+  private initializeCells(): CellModel[] {
+    const cells = new Array<CellModel>(this.templateColumns * this.templateRows);
 
-  public getColumnHint(xCoord: number, yCoord: number): HintModel {
-    return this.columnHints[yCoord]![xCoord]!;
-  }
+    for (let rowIndex = 0; rowIndex < this.templateRows; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < this.templateColumns; colIndex += 1) {
+        cells[rowIndex * this.templateColumns + colIndex] = new CellModel(colIndex, rowIndex);
+      }
+    }
 
-  public getRowHint(xCoord: number, yCoord: number): HintModel {
-    return this.rowHints[yCoord]![xCoord]!;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  private initializeHints(sequences: number[][]): HintModel[][] {
-    return sequences.map((sequence) => sequence.map((hintValue) => new HintModel(hintValue)));
-  }
-
-  private initializePlayerCellsValues(): NonogramGrid {
-    return Array.from({ length: this.templateRows }, () =>
-      Array.from({ length: this.templateColumns }, () => 0),
-    );
-  }
-
-  private initializeCells(): CellModel[][] {
-    return Array.from({ length: this.templateRows }, (_, rowIndex) =>
-      Array.from(
-        { length: this.templateColumns },
-        (__, colIndex) => new CellModel(colIndex, rowIndex),
-      ),
-    );
+    return cells;
   }
 }

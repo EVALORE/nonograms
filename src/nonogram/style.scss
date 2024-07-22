@@ -1,3 +1,7 @@
+.nonogram table {
+  border-collapse: collapse;
+}
+
 .cell {
   display: inline-block;
   width: 20px;
@@ -11,6 +15,6 @@
 }
 
 .empty-body {
-  display: inline-block;
+  display: inline;
   width: 100px;
 }

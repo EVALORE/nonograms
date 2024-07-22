@@ -3,10 +3,18 @@ export class StaticGrid<DataType> {
   private readonly height: number;
   private readonly grid: (DataType | null)[];
 
-  constructor(width: number, height = 1) {
+  constructor(
+    width: number,
+    height: number,
+    mapfn?: (value: DataType | null, index: number) => void,
+  ) {
     this.width = width;
     this.height = height;
     this.grid = new Array<DataType | null>(width * height);
+
+    if (mapfn) {
+      this.grid.map(mapfn);
+    }
   }
 
   public setData(value: DataType, xCoord: number, yCoord = 0): void {
