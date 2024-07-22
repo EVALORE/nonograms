@@ -1,5 +1,5 @@
 import { CellModel } from './cell';
-import { HintModel } from './hint';
+import { HintSequenceModel } from './hintSequence';
 import { type NonogramGrid } from './types/templateValues';
 import { extractHintSequences } from './lib';
 
@@ -17,8 +17,8 @@ export class NonogramModel {
   public readonly templateColumns: number;
 
   public readonly cells: CellModel[];
-  public readonly columnHints: HintModel[];
-  public readonly rowHints: HintModel[];
+  public readonly columnHints: HintSequenceModel[];
+  public readonly rowHints: HintSequenceModel[];
 
   public readonly template: NonogramGrid;
 
@@ -37,38 +37,18 @@ export class NonogramModel {
     this.cells = this.initializeCells();
   }
 
-  private initializeColumnHints(): HintModel[] {
-    const sequencesOfEachColumn = extractHintSequences('column', template);
+  private initializeColumnHints(): HintSequenceModel[] {
+    const sequencesOfEachColumn = extractHintSequences('column', this.template);
     this.longestColumnSequence = sequencesOfEachColumn[0]!.length;
 
-    const hints = new Array<HintModel>(this.templateColumns * this.longestColumnSequence);
-
-    for (let rowIndex = 0; rowIndex < this.templateColumns; rowIndex += 1) {
-      for (let colIndex = 0; colIndex < this.longestColumnSequence; colIndex += 1) {
-        hints[rowIndex * this.longestColumnSequence + colIndex] = new HintModel(
-          sequencesOfEachColumn[rowIndex]![colIndex]!,
-        );
-      }
-    }
-
-    return hints;
+    return sequencesOfEachColumn.map((sequence) => new HintSequenceModel(sequence));
   }
 
-  private initializeRowHints(): HintModel[] {
-    const sequencesOfEachRow = extractHintSequences('row', template);
+  private initializeRowHints(): HintSequenceModel[] {
+    const sequencesOfEachRow = extractHintSequences('row', this.template);
     this.longestRowSequence = sequencesOfEachRow[0]!.length;
 
-    const hints = new Array<HintModel>(this.templateRows * this.longestRowSequence);
-
-    for (let rowIndex = 0; rowIndex < this.templateRows; rowIndex += 1) {
-      for (let hintIndex = 0; hintIndex < this.longestRowSequence; hintIndex += 1) {
-        hints[rowIndex * this.longestRowSequence + hintIndex] = new HintModel(
-          sequencesOfEachRow[rowIndex]![hintIndex]!,
-        );
-      }
-    }
-
-    return hints;
+    return sequencesOfEachRow.map((sequence) => new HintSequenceModel(sequence));
   }
 
   private initializeCells(): CellModel[] {

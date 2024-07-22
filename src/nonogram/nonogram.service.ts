@@ -31,11 +31,11 @@ export class NonogramService implements Observer<CellCoords> {
   }
 
   public getRowHint(colIndex: number, rowIndex: number): HintModel {
-    return this.nonogram.rowHints[rowIndex * this.lengthOfRowHints + colIndex]!;
+    return this.nonogram.rowHints[rowIndex]!.hints[colIndex]!;
   }
 
   public getColumnHint(rowIndex: number, colIndex: number): HintModel {
-    return this.nonogram.columnHints[colIndex * this.lengthOfColumnHints + rowIndex]!;
+    return this.nonogram.columnHints[colIndex]!.hints[rowIndex]!;
   }
 
   public update(value: CellCoords): void {
