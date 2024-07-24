@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "prepare": "husky install",
-    "eslint": "eslint ./src --fix"
+    "eslint": "eslint --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
