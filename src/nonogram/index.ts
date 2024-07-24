@@ -1,8 +1,8 @@
 import './style.scss';
 import { NonogramModel } from './nonogram.model';
-import { NonogramService } from './nonogram.service';
 import { nonogram } from './nonogram.component';
+import { template } from './api/templateExample';
 
-const nonogramModel = new NonogramModel();
-const nonogramService = new NonogramService(nonogramModel);
-export const Nonogram = nonogram(nonogramService).node;
+const nonogramModel = new NonogramModel(template);
+
+export const Nonogram = nonogram(nonogramModel).node;
