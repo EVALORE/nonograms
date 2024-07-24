@@ -25,6 +25,8 @@ export class NonogramModel {
   public longestColumnSequence = 0;
   public longestRowSequence = 0;
 
+  public state: 'unsolved' | 'solved' = 'unsolved';
+
   constructor() {
     this.template = template;
     this.templateRows = template.length;

@@ -1,6 +1,6 @@
 import { type NonogramGrid } from '../types/templateValues';
 
-function extractLineSequence(line: (0 | 1)[]): number[] {
+export function extractLineSequence(line: (0 | 1)[]): number[] {
   const sequences: number[] = [];
   let counter = 0;
 

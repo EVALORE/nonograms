@@ -5,7 +5,6 @@ export class HintSequenceModel {
   public readonly hints: HintModel[];
   constructor(public readonly sequence: number[]) {
     this.state = sequence.length === 0 ? 'solved' : 'unsolved';
-
     this.hints = sequence.map((value) => new HintModel(value));
   }
 }
