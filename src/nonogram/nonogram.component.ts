@@ -1,7 +1,5 @@
 import { BaseComponent, bcToFc, table, tbody, td, tr } from '@control.ts/min';
-
 import { cell } from './cell';
-
 import { hint } from './hint';
 import { NonogramModel } from './nonogram.model';
 

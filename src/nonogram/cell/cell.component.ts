@@ -8,8 +8,8 @@ export class CellComponent extends BaseComponent<HTMLTableCellElement> {
       className: 'cell',
     });
 
-    this.setRightClickListener(this.cellModel.handleRightClick);
-    this.setLeftClickListener(this.cellModel.handleLeftClick);
+    this.setRightClickListener(this.cellModel.toggleCross);
+    this.setLeftClickListener(this.cellModel.toggleFill);
   }
 
   public setRightClickListener(rightClickHandler: () => void): void {

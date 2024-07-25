@@ -1,24 +1,29 @@
-import { type CellCoords, type CellStates } from './cell.type';
-import { Observable } from '@shared/observer';
+export type CellStates = 'empty' | 'filled' | 'crossed';
 
-export class CellModel extends Observable<CellCoords> {
+export interface CellCoords {
+  colIndex: number;
+  rowIndex: number;
+}
+
+export class CellModel {
   public state: CellStates = 'empty';
-  public readonly xCoord: number;
-  public readonly yCoord: number;
 
-  constructor(xCoord: number, yCoord: number) {
-    super();
-    this.xCoord = xCoord;
-    this.yCoord = yCoord;
+  public onStateChange: () => void;
+
+  constructor(onStateChange: () => void) {
+    this.onStateChange = onStateChange;
   }
 
-  public handleLeftClick = (): void => {
-    this.state = this.state === 'empty' || this.state === 'crossed' ? 'filled' : 'empty';
-    this.notify({ xCoord: this.xCoord, yCoord: this.yCoord });
+  public toggleFill = (): void => {
+    this.updateState(this.state === 'filled' ? 'empty' : 'filled');
   };
 
-  public handleRightClick = (): void => {
-    this.state = this.state === 'empty' || this.state === 'filled' ? 'crossed' : 'empty';
-    this.notify({ xCoord: this.xCoord, yCoord: this.yCoord });
+  public toggleCross = (): void => {
+    this.updateState(this.state === 'crossed' ? 'empty' : 'crossed');
   };
+
+  private updateState(state: CellStates): void {
+    this.state = state;
+    this.onStateChange();
+  }
 }

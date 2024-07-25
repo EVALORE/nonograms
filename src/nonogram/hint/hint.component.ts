@@ -13,8 +13,8 @@ export class HintComponent extends BaseComponent<HTMLTableCellElement> {
     if (hintModel.value === 0) {
       return;
     }
-    this.setLeftClickListener(this.hintModel.handleClick);
-    this.setRightClickListener(this.hintModel.handleClick);
+    this.setLeftClickListener(this.hintModel.toggleState);
+    this.setRightClickListener(this.hintModel.toggleState);
   }
 
   public setRightClickListener(rightClickHandler: () => void): void {

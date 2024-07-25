@@ -1,29 +1,28 @@
 import { CellModel } from './cell';
 import { type HintModel } from './hint';
 import { HintSequenceModel } from './hintSequence';
-import { type NonogramGrid } from './types/templateValues';
 
 export class NonogramModel {
   public readonly templateRows: number;
   public readonly templateColumns: number;
 
   public readonly cells: CellModel[];
-  public readonly columnHints: HintSequenceModel[];
-  public readonly rowHints: HintSequenceModel[];
+  public readonly columnHintSequences: HintSequenceModel[];
+  public readonly rowHintSequences: HintSequenceModel[];
 
-  public readonly template: NonogramGrid;
+  public readonly template: number[][];
 
   public longestColumnSequence = 0;
   public longestRowSequence = 0;
 
   public state: 'unsolved' | 'solved' = 'unsolved';
 
-  constructor(template: NonogramGrid) {
+  constructor(template: number[][]) {
     this.template = template;
     this.templateRows = template.length;
     this.templateColumns = template[0]!.length;
-    this.columnHints = this.initializeHints('column');
-    this.rowHints = this.initializeHints('row');
+    this.columnHintSequences = this.initializeHints('column');
+    this.rowHintSequences = this.initializeHints('row');
     this.cells = this.initializeCells();
   }
 
@@ -31,7 +30,7 @@ export class NonogramModel {
     return this.cells[rowIndex * this.templateColumns + colIndex]!;
   }
 
-  public getCellRowSequence(rowIndex: number): number[] {
+  public getRowCellSequence(rowIndex: number): number[] {
     const firstCellInRow = rowIndex * this.templateColumns;
     const lastCellInRow = rowIndex * this.templateColumns + this.templateColumns - 1;
 
@@ -44,7 +43,7 @@ export class NonogramModel {
     return this.extractSequence(sequence);
   }
 
-  public getCellColumnSequence(colIndex: number): number[] {
+  public getColumnCellSequence(colIndex: number): number[] {
     const sequence: (0 | 1)[] = [];
 
     for (let rowIndex = 0; rowIndex < this.templateRows; rowIndex += 1) {
@@ -56,19 +55,51 @@ export class NonogramModel {
   }
 
   public getRowHint(colIndex: number, rowIndex: number): HintModel {
-    return this.rowHints[rowIndex]!.getHint(colIndex);
+    return this.rowHintSequences[rowIndex]!.getHint(colIndex);
   }
 
   public getColumnHint(rowIndex: number, colIndex: number): HintModel {
-    return this.columnHints[colIndex]!.getHint(rowIndex);
+    return this.columnHintSequences[colIndex]!.getHint(rowIndex);
   }
 
   public getColumnHintSequence(colIndex: number): number[] {
-    return this.columnHints[colIndex]!.sequence;
+    return this.columnHintSequences[colIndex]!.sequence;
   }
 
   public getRowHintSequence(rowIndex: number): number[] {
-    return this.rowHints[rowIndex]!.sequence;
+    return this.rowHintSequences[rowIndex]!.sequence;
+  }
+
+  private isNonogramSolved(): boolean {
+    return (
+      this.columnHintSequences.every((sequence) => sequence.state === 'solved') &&
+      this.rowHintSequences.every((sequence) => sequence.state === 'solved')
+    );
+  }
+
+  private changeNonogramState(): void {
+    this.state = this.isNonogramSolved() ? 'solved' : 'unsolved';
+  }
+
+  private checkSequences(colIndex: number, rowIndex: number): void {
+    const isRightColumnSequence =
+      JSON.stringify(this.getColumnCellSequence(colIndex)) ===
+      JSON.stringify(this.getColumnHintSequence(colIndex));
+    const isRightRowSequence =
+      JSON.stringify(this.getRowCellSequence(rowIndex)) ===
+      JSON.stringify(this.getRowHintSequence(rowIndex));
+
+    if (isRightColumnSequence) {
+      this.columnHintSequences[colIndex]!.state = 'solved';
+    }
+
+    if (isRightRowSequence) {
+      this.rowHintSequences[rowIndex]!.state = 'solved';
+    }
+
+    if (isRightColumnSequence && isRightRowSequence) {
+      this.changeNonogramState();
+    }
   }
 
   private initializeCells(): CellModel[] {
@@ -76,11 +107,19 @@ export class NonogramModel {
 
     for (let rowIndex = 0; rowIndex < this.templateRows; rowIndex += 1) {
       for (let colIndex = 0; colIndex < this.templateColumns; colIndex += 1) {
-        cells[rowIndex * this.templateColumns + colIndex] = new CellModel(colIndex, rowIndex);
+        cells[rowIndex * this.templateColumns + colIndex] = new CellModel(() => {
+          this.checkSequences(colIndex, rowIndex);
+        });
       }
     }
 
     return cells;
+  }
+
+  private initializeHints(direction: 'row' | 'column'): HintSequenceModel[] {
+    const sequences = this.extractHintSequences(direction);
+    this.updateLongestSequence(sequences, direction);
+    return sequences.map((sequence) => new HintSequenceModel(sequence));
   }
 
   private extractSequence = (line: number[]): number[] =>
@@ -89,12 +128,6 @@ export class NonogramModel {
       .split('0')
       .filter(Boolean)
       .map((seq) => seq.length);
-
-  private initializeHints(direction: 'row' | 'column'): HintSequenceModel[] {
-    const sequences = this.extractHintSequences(direction);
-    this.updateLongestSequence(sequences, direction);
-    return sequences.map((sequence) => new HintSequenceModel(sequence));
-  }
 
   private updateLongestSequence(sequences: number[][], direction: 'row' | 'column') {
     const longestSequenceLength = sequences[0]!.length;

@@ -1,4 +1,4 @@
-import { type HintStates } from './hint.type';
+export type HintStates = 'crossed' | 'unsolved' | 'solved';
 
 export class HintModel {
   public state: HintStates = 'unsolved';
@@ -8,7 +8,7 @@ export class HintModel {
     this.value = value;
   }
 
-  public handleClick = (): void => {
+  public toggleState = (): void => {
     if (this.state === 'solved') {
       return;
     }
