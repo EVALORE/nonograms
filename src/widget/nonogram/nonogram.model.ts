@@ -1,3 +1,4 @@
+import { templateAPI } from '@features';
 import { CellModel } from './cell';
 import { type HintModel } from './hint';
 import { HintSequenceModel } from './hintSequence';
@@ -10,17 +11,16 @@ export class NonogramModel {
   public readonly columnHintSequences: HintSequenceModel[];
   public readonly rowHintSequences: HintSequenceModel[];
 
-  public readonly template: number[][];
-
   public longestColumnSequence = 0;
   public longestRowSequence = 0;
 
   public state: 'unsolved' | 'solved' = 'unsolved';
+  public puzzle: number[][];
 
-  constructor(template: number[][]) {
-    this.template = template;
-    this.templateRows = template.length;
-    this.templateColumns = template[0]!.length;
+  constructor({ columns, rows, puzzle }: templateAPI) {
+    this.templateRows = rows;
+    this.templateColumns = columns;
+    this.puzzle = puzzle;
     this.columnHintSequences = this.initializeHints('column');
     this.rowHintSequences = this.initializeHints('row');
     this.cells = this.initializeCells();
@@ -85,6 +85,7 @@ export class NonogramModel {
     const isRightColumnSequence =
       JSON.stringify(this.getColumnCellSequence(colIndex)) ===
       JSON.stringify(this.getColumnHintSequence(colIndex));
+
     const isRightRowSequence =
       JSON.stringify(this.getRowCellSequence(rowIndex)) ===
       JSON.stringify(this.getRowHintSequence(rowIndex));
@@ -147,7 +148,7 @@ export class NonogramModel {
   }
 
   private extractRowHintSequences(): number[][] {
-    return this.template.map(this.extractSequence);
+    return this.puzzle.map(this.extractSequence);
   }
 
   private extractColumnHintSequences(): number[][] {
@@ -155,8 +156,8 @@ export class NonogramModel {
   }
 
   private transposeTemplate(): number[][] {
-    return Array.from({ length: this.template[0]!.length }, (_, colIndex) =>
-      this.template.map((row) => row[colIndex]!),
+    return Array.from({ length: this.templateColumns }, (_, colIndex) =>
+      this.puzzle.map((row) => row[colIndex]!),
     );
   }
 

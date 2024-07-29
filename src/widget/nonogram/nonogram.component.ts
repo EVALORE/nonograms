@@ -8,9 +8,16 @@ export class NonogramComponent extends BaseComponent<HTMLTableElement> {
   private columnHintsTable!: HTMLTableElement;
   private rowHintsTable!: HTMLTableElement;
 
-  constructor(private readonly nonogram: NonogramModel) {
+  constructor(private nonogram: NonogramModel) {
     super({ tag: 'table', className: 'nonogram' });
     this.initializeTables();
+    this.renderTables();
+  }
+
+  public setNewTemplate(nonogram: NonogramModel): void {
+    this.nonogram = nonogram;
+    this.initializeTables();
+
     this.renderTables();
   }
 

@@ -9,8 +9,15 @@
       "@utils/*": ["./src/app/utils/*"],
 
       "@pages/*": ["./src/pages/*"],
+      "@pages": ["./src/pages"],
       "@shared/*": ["./src/shared/*"],
-      "@widget": ["./src/widget/*"],
+      "@shared": ["./src/shared"],
+      "@widget/*": ["./src/widget/*"],
+      "@widget": ["./src/widget"],
+      "@features/*": ["./src/features/*"],
+      "@features": ["./src/features"],
+      "@entities/*": ["./src/entities/*"],
+      "@entities": ["./src/entities"],
       "@src/*": ["./src/*"]
     },
     "target": "ES2021",

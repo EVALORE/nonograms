@@ -1,6 +1,4 @@
-import { NonogramGrid } from '../types/templateValues';
-
-export const template: NonogramGrid = [
+export const template = [
   [0, 0, 0, 1, 0, 0, 0],
   [0, 0, 1, 1, 1, 0, 0],
   [0, 1, 1, 1, 1, 1, 0],
