@@ -1,16 +1,29 @@
-import { templateAPI } from '@features/levels';
-import { Observable } from '@shared/observer';
+import { Observable, templateData } from '@shared';
 
-class StateService extends Observable<templateAPI> {
-  private currentLevel: templateAPI | null = null;
+export const template = {
+  id: -1,
+  name: 'default',
+  difficulty: 'easy',
+  columns: 7,
+  rows: 6,
+  puzzle: [
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 1, 1, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0],
+  ],
+};
 
-  public getCurrentLevel(): templateAPI | null {
+export class StateService extends Observable<templateData> {
+  private currentLevel: templateData | null = template;
+
+  public getCurrentLevel(): templateData | null {
     return this.currentLevel;
   }
 
-  public setCurrentLevel(level: templateAPI): void {
+  public setCurrentLevel(level: templateData): void {
     this.currentLevel = level;
   }
 }
-
-export const stateService = new StateService();

@@ -1,5 +1,5 @@
 import { BaseComponent, div, h1 } from '@control.ts/min';
-import { AppRoute, changeLocation } from '@shared/router';
+import { AppRoute, changeLocation } from '@shared';
 
 export class MainPage extends BaseComponent<HTMLDivElement> {
   constructor() {
@@ -12,7 +12,7 @@ export class MainPage extends BaseComponent<HTMLDivElement> {
       div({
         txt: 'Play',
         onclick: () => {
-          changeLocation(AppRoute.game);
+          changeLocation(AppRoute.levels);
         },
       }),
     );

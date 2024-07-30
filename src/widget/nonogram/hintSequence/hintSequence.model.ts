@@ -1,4 +1,4 @@
-import { HintModel } from '../hint/hint.model';
+import { HintModel } from '../hint';
 
 export class HintSequenceModel {
   public state: 'solved' | 'unsolved';

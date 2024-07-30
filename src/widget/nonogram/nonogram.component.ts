@@ -4,17 +4,12 @@ import { hint } from './hint';
 import { NonogramModel } from './nonogram.model';
 
 export class NonogramComponent extends BaseComponent<HTMLTableElement> {
-  private nonogram!: NonogramModel;
   private cellTable!: HTMLTableElement;
   private columnHintsTable!: HTMLTableElement;
   private rowHintsTable!: HTMLTableElement;
 
-  constructor() {
+  constructor(private readonly nonogram: NonogramModel) {
     super({ tag: 'table', className: 'nonogram' });
-  }
-
-  public setTemplate(nonogram: NonogramModel): void {
-    this.nonogram = nonogram;
     this.initializeTables();
     this.renderTables();
   }

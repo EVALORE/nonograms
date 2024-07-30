@@ -1,9 +1,11 @@
 import { mount } from '@control.ts/min';
 import { MainPage, GamePage, LevelsPage } from '@pages';
+import { StateService } from '@shared';
 
 import { AppRoute, Route, Router } from '@shared/router';
 
 class App {
+  private state: StateService = new StateService();
   private routes: Route[] = [
     {
       name: AppRoute.main,
@@ -11,11 +13,11 @@ class App {
     },
     {
       name: AppRoute.levels,
-      component: () => new LevelsPage().node,
+      component: () => new LevelsPage(this.state).node,
     },
     {
       name: AppRoute.game,
-      component: () => new GamePage().node,
+      component: () => new GamePage(this.state).node,
     },
   ];
   private defaultRouter = this.routes[0]?.component;

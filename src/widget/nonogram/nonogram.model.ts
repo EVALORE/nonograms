@@ -1,4 +1,4 @@
-import { templateAPI } from '@features';
+import { templateData } from '@shared';
 import { CellModel } from './cell';
 import { type HintModel } from './hint';
 import { HintSequenceModel } from './hintSequence';
@@ -17,7 +17,7 @@ export class NonogramModel {
   public state: 'unsolved' | 'solved' = 'unsolved';
   public puzzle: number[][];
 
-  constructor({ columns, rows, puzzle }: templateAPI) {
+  constructor({ columns, rows, puzzle }: templateData) {
     this.templateRows = rows;
     this.templateColumns = columns;
     this.puzzle = puzzle;

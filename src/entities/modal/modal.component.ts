@@ -8,7 +8,8 @@ export class ModalComponent extends BaseComponent<HTMLDivElement> {
     super({});
     this.modalContent = div(
       { className: `${context}-modal` },
-      h5({ txt: title }, typeof content === 'string' ? div({ txt: content }) : content),
+      h5({ txt: title }),
+      typeof content === 'string' ? div({ txt: content }) : content,
     );
 
     this.appendChildren([this.modalWrapper, this.modalContent]);
