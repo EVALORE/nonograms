@@ -1,15 +1,13 @@
-import { type Observer } from './observer';
-
 export abstract class Observable<T> {
-  private readonly observers: Observer<T>[] = [];
+  private readonly observers: ((value: T) => void)[] = [];
 
-  public attach(observer: Observer<T>): void {
+  public subscribe(observer: (value: T) => void): void {
     if (!this.observers.includes(observer)) {
       this.observers.push(observer);
     }
   }
 
-  public detach(observer: Observer<T>): void {
+  public unsubscribe(observer: (value: T) => void): void {
     const index = this.observers.indexOf(observer);
     if (index !== -1) {
       this.observers.splice(index, 1);
@@ -18,7 +16,7 @@ export abstract class Observable<T> {
 
   public notify(value: T): void {
     this.observers.forEach((observer) => {
-      observer.update(value);
+      observer(value);
     });
   }
 }
