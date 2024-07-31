@@ -28,6 +28,10 @@ export class GameService extends Observable<string> {
     this.currentLevel = level;
   }
 
+  public getState(): 'solved' | 'unsolved' {
+    return this.state;
+  }
+
   public setState(state: 'solved' | 'unsolved'): void {
     this.state = state;
     if (state === 'solved') {
