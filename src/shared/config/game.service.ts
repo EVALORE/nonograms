@@ -16,8 +16,9 @@ export const template = {
   ],
 };
 
-export class StateService extends Observable<templateData> {
+export class GameService extends Observable<string> {
   private currentLevel: templateData | null = template;
+  private state: 'solved' | 'unsolved' = 'unsolved';
 
   public getCurrentLevel(): templateData | null {
     return this.currentLevel;
@@ -25,5 +26,12 @@ export class StateService extends Observable<templateData> {
 
   public setCurrentLevel(level: templateData): void {
     this.currentLevel = level;
+  }
+
+  public setState(state: 'solved' | 'unsolved'): void {
+    this.state = state;
+    if (state === 'solved') {
+      this.notify(this.state);
+    }
   }
 }

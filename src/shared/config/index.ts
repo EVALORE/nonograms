@@ -1,2 +1,2 @@
 export * from './settings.service';
-export * from './state.service';
+export * from './game.service';

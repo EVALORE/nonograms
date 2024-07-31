@@ -1,12 +1,12 @@
 import { BaseComponent } from '@control.ts/min';
 import { LevelsListComponent } from '@features';
-import { changeLocation, StateService, AppRoute, templateData } from '@shared';
+import { changeLocation, GameService, AppRoute, templateData } from '@shared';
 
 export class LevelsPage extends BaseComponent<HTMLDivElement> {
   private levelsListComponent: LevelsListComponent;
 
-  private readonly state: StateService;
-  constructor(state: StateService) {
+  private readonly state: GameService;
+  constructor(state: GameService) {
     super({
       tag: 'div',
       className: 'levels-page',

@@ -1,11 +1,11 @@
 import { mount } from '@control.ts/min';
 import { MainPage, GamePage, LevelsPage } from '@pages';
-import { StateService } from '@shared';
+import { GameService } from '@shared';
 
 import { AppRoute, Route, Router } from '@shared/router';
 
 class App {
-  private state: StateService = new StateService();
+  private state: GameService = new GameService();
   private routes: Route[] = [
     {
       name: AppRoute.main,

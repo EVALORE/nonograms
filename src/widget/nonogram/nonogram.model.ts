@@ -17,10 +17,13 @@ export class NonogramModel {
   public state: 'unsolved' | 'solved' = 'unsolved';
   public puzzle: number[][];
 
-  constructor({ columns, rows, puzzle }: templateData) {
+  private readonly onSolved: () => void;
+
+  constructor({ columns, rows, puzzle }: templateData, onSolved: () => void) {
     this.templateRows = rows;
     this.templateColumns = columns;
     this.puzzle = puzzle;
+    this.onSolved = onSolved;
     this.columnHintSequences = this.initializeHints('column');
     this.rowHintSequences = this.initializeHints('row');
     this.cells = this.initializeCells();
@@ -79,6 +82,10 @@ export class NonogramModel {
 
   private changeNonogramState(): void {
     this.state = this.isNonogramSolved() ? 'solved' : 'unsolved';
+
+    if (this.state === 'solved') {
+      this.onSolved();
+    }
   }
 
   private checkSequences(colIndex: number, rowIndex: number): void {
