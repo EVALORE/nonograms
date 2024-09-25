@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`test modal component > should match the snapshot 1`] = `
+<div>
+  <div
+    class="modal-background"
+  />
+  <div
+    class="modal-modal"
+  >
+    <h5>
+      title
+    </h5>
+    <div>
+      content
+    </div>
+  </div>
+</div>
+`;

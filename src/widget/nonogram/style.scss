@@ -1,0 +1,20 @@
+.nonogram table {
+  border-collapse: collapse;
+}
+
+.cell {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  border: 1px solid black;
+
+  &.filled {
+    background-color: black;
+  }
+}
+
+.empty-body {
+  display: inline;
+  width: 100px;
+}
